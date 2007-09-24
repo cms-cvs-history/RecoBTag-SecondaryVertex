@@ -4,8 +4,8 @@ module secondaryVertexTagInfos = SecondaryVertexProducer {
 	include "RecoBTag/SecondaryVertex/data/trackSelection.cfi"
 	include "RecoBTag/SecondaryVertex/data/vertexReco.cfi"
 	include "RecoBTag/SecondaryVertex/data/vertexCuts.cfi"
+	include "RecoBTag/SecondaryVertex/data/vertexSelection.cfi"
 
 	string trackSort = "sip3dSig"
 	bool usePVError = false
-	bool vertex3dSorting = true
 }
