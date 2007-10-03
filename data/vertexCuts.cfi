@@ -1,12 +1,12 @@
 PSet vertexCuts = {
-	bool useTrackWeights = false
+	bool useTrackWeights = true
 	double massMax = 6.5
 	double fracPV = 0.65
 	uint32 multiplicityMin = 2
-	double distVal2dMin = -99999.9
+	double distVal2dMin = -0.01
 	double distVal2dMax = 2.5
-	double distVal3dMin = 0.1
-	double distVal3dMax = 4.0
+	double distVal3dMin = 0.0
+	double distVal3dMax = +99999.9
 	double distSig2dMin = -99999.9
 	double distSig2dMax = +99999.9
 	double distSig3dMin = 2.0

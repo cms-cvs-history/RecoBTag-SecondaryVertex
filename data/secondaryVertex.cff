@@ -1,1 +1,4 @@
 include "RecoBTag/SecondaryVertex/data/secondaryVertexTagInfos.cfi"
+
+include "RecoBTag/SecondaryVertex/data/simpleSecondaryVertexComputer.cfi"
+include "RecoBTag/SecondaryVertex/data/simpleSecondaryVertexJetTags.cfi"
