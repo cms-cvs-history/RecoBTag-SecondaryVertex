@@ -1,4 +1,4 @@
-module simpleSecondaryVertexJetTags = JetTagProducer { 
+module simpleSecondaryVertexBJetTags = JetTagProducer { 
 	InputTag tagInfo = secondaryVertexTagInfos
 	string jetTagComputer = "simpleSecondaryVertex"
 }
