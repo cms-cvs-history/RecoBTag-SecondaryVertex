@@ -7,5 +7,5 @@ module secondaryVertexTagInfos = SecondaryVertexProducer {
 	include "RecoBTag/SecondaryVertex/data/vertexSelection.cfi"
 
 	string trackSort = "sip3dSig"
-	bool usePVError = false
+	bool usePVError = true
 }

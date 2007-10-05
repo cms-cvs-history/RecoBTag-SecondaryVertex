@@ -1,0 +1,4 @@
+module combinedSVBJetTags = JetTagProducer { 
+	InputTag tagInfo = secondaryVertexTagInfos
+	string jetTagComputer = "combinedSV"
+}
