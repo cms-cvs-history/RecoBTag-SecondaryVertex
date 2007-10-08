@@ -1,11 +1,11 @@
 PSet trackPseudoSelection = {
 	double sip2dValMin = -99999.9
 	double sip2dValMax = +99999.9
-	double sip2dSigMin = 1.0
+	double sip2dSigMin = 2.0
 	double sip2dSigMax = +99999.9
 
 	double sip3dValMin = -99999.9
 	double sip3dValMax = +99999.9
-	double sip3dSigMin = 2.0
+	double sip3dSigMin = -99999.9
 	double sip3dSigMax = +99999.9
 }

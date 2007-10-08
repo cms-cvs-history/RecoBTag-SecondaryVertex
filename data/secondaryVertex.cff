@@ -1,7 +1,14 @@
+include "TrackingTools/TransientTrack/data/TransientTrackBuilder.cfi"
+include "MagneticField/Engine/data/volumeBasedMagneticField.cfi"
+include "RecoBTau/JetTagComputer/data/jetTagRecord.cfi"
+
 include "RecoBTag/SecondaryVertex/data/secondaryVertexTagInfos.cfi"
 
-include "RecoBTag/SecondaryVertex/data/simpleSecondaryVertexComputer.cfi"
+include "RecoBTag/SecondaryVertex/data/simpleSecondaryVertexES.cfi"
 include "RecoBTag/SecondaryVertex/data/simpleSecondaryVertexBJetTags.cfi"
 
-include "RecoBTag/SecondaryVertex/data/combinedSVComputer.cfi"
+include "RecoBTag/SecondaryVertex/data/combinedSVES.cfi"
 include "RecoBTag/SecondaryVertex/data/combinedSVBJetTags.cfi"
+
+include "RecoBTag/SecondaryVertex/data/combinedSVMVAES.cfi"
+include "RecoBTag/SecondaryVertex/data/combinedSVMVABJetTags.cfi"

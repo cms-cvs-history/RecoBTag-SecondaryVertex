@@ -1,0 +1,8 @@
+block combinedSVCommon = {
+	include "RecoBTag/SecondaryVertex/data/trackPseudoSelection.cfi"
+
+	double charmCut			= 1.5
+	string trackSort		= "sip2dSig"
+	uint32 pseudoMultiplicityMin	= 2
+	bool useTrackWeights		= false
+}
