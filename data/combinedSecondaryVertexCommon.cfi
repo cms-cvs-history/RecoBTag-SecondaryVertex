@@ -1,4 +1,4 @@
-block combinedSVCommon = {
+block combinedSecondaryVertexCommon = {
 	include "RecoBTag/SecondaryVertex/data/trackPseudoSelection.cfi"
 
 	double charmCut			= 1.5

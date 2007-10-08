@@ -6,6 +6,8 @@ PSet trackSelection = {
 
 	double sip3dValMin = -99999.9
 	double sip3dValMax = +99999.9
-	double sip3dSigMin = 0.0
+# let the adaptive vertex finder find all possible vertices, and filter
+#	double sip3dSigMin = 0.0
+	double sip3dSigMin = -99999.9
 	double sip3dSigMax = +99999.9
 }

@@ -1,9 +1,9 @@
-include "RecoBTag/SecondaryVertex/data/combinedSVCommon.cfi"
+include "RecoBTag/SecondaryVertex/data/combinedSecondaryVertexCommon.cfi"
 
-es_module combinedSVMVAES = CombinedSVESProducer {
-	string ComponentName    = "combinedSVMVA"
+es_module combinedSecondaryVertexMVAES = CombinedSecondaryVertexESProducer {
+	string ComponentName    = "combinedSecondaryVertexMVA"
 	PSet JetTagComputerPSet = {
-		using combinedSVCommon
+		using combinedSecondaryVertexCommon
 
 		bool useCategories		= true
 		string categoryVariableName     = "vertexCategory"

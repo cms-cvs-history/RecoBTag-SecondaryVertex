@@ -7,8 +7,8 @@ include "RecoBTag/SecondaryVertex/data/secondaryVertexTagInfos.cfi"
 include "RecoBTag/SecondaryVertex/data/simpleSecondaryVertexES.cfi"
 include "RecoBTag/SecondaryVertex/data/simpleSecondaryVertexBJetTags.cfi"
 
-include "RecoBTag/SecondaryVertex/data/combinedSVES.cfi"
-include "RecoBTag/SecondaryVertex/data/combinedSVBJetTags.cfi"
+include "RecoBTag/SecondaryVertex/data/combinedSecondaryVertexES.cfi"
+include "RecoBTag/SecondaryVertex/data/combinedSecondaryVertexBJetTags.cfi"
 
-include "RecoBTag/SecondaryVertex/data/combinedSVMVAES.cfi"
-include "RecoBTag/SecondaryVertex/data/combinedSVMVABJetTags.cfi"
+include "RecoBTag/SecondaryVertex/data/combinedSecondaryVertexMVAES.cfi"
+include "RecoBTag/SecondaryVertex/data/combinedSecondaryVertexMVABJetTags.cfi"

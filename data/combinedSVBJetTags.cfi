@@ -1,5 +1,0 @@
-module combinedSVBJetTags = JetTagProducer { 
-	InputTag ipTagInfos = impactParameterTagInfos
-	InputTag svTagInfos = secondaryVertexTagInfos
-	string jetTagComputer = "combinedSV"
-}
