@@ -1,7 +1,6 @@
 include "RecoBTag/SecondaryVertex/data/combinedSecondaryVertexCommon.cfi"
 
-es_module combinedSecondaryVertexES = CombinedSecondaryVertexESProducer {
-	string ComponentName    = "combinedSecondaryVertex"
+es_module combinedSecondaryVertex = CombinedSecondaryVertexESProducer {
 	PSet JetTagComputerPSet = {
 		using combinedSecondaryVertexCommon
 
