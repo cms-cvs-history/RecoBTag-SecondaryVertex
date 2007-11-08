@@ -1,15 +1,13 @@
 include "RecoBTag/SecondaryVertex/data/combinedSecondaryVertexCommon.cfi"
 
 es_module combinedSecondaryVertexMVA = CombinedSecondaryVertexESProducer {
-	PSet JetTagComputerPSet = {
-		using combinedSecondaryVertexCommon
+	using combinedSecondaryVertexCommon
 
-		bool useCategories		= true
-		string categoryVariableName     = "vertexCategory"
-		vstring calibrationRecords      = {
-			"CombinedSVMVARecoVertex",
-			"CombinedSVMVAPseudoVertex",
-			"CombinedSVMVANoVertex"
-		}
+	bool useCategories		= true
+	string categoryVariableName     = "vertexCategory"
+	vstring calibrationRecords      = {
+		"CombinedSVMVARecoVertex",
+		"CombinedSVMVAPseudoVertex",
+		"CombinedSVMVANoVertex"
 	}
 }
