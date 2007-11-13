@@ -1,11 +1,11 @@
 module secondaryVertexTagInfos = SecondaryVertexProducer {
-	InputTag trackIPTagInfos = impactParameterTagInfos
+	InputTag trackIPTagInfos	= impactParameterTagInfos
 
 	include "RecoBTag/SecondaryVertex/data/trackSelection.cfi"
 	include "RecoBTag/SecondaryVertex/data/vertexReco.cfi"
 	include "RecoBTag/SecondaryVertex/data/vertexCuts.cfi"
 	include "RecoBTag/SecondaryVertex/data/vertexSelection.cfi"
 
-	string trackSort = "sip3dSig"
-	bool usePVError = true
+	string trackSort		= "sip3dSig"
+	bool usePVError			= true
 }
