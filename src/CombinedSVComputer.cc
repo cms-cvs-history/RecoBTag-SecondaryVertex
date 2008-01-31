@@ -112,9 +112,12 @@ CombinedSVComputer::operator () (const TrackIPTagInfo &ipInfo,
 		for(unsigned int i = 0; i < svInfo.nVertices(); i++) {
 			TrackRefVector tracks = svInfo.vertexTracks(i);
 			for(TrackRefVector::const_iterator track = tracks.begin();
-			    track != tracks.end(); track++)
-				vertexKinematics.add(**track,
-						svInfo.trackWeight(i, *track));
+			    track != tracks.end(); track++) {
+				double w = svInfo.trackWeight(i, *track);
+				if (w < 0.5)
+					continue;
+				vertexKinematics.add(**track, w);
+			}
 		}
 
 		vars.insert(btau::flightDistance2dVal,

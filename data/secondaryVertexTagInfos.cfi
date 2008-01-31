@@ -8,4 +8,5 @@ module secondaryVertexTagInfos = SecondaryVertexProducer {
 
 	string trackSort		= "sip3dSig"
 	bool usePVError			= true
+	double minimumTrackWeight	= 0.5
 }
