@@ -37,6 +37,7 @@ CombinedSVComputer::CombinedSVComputer(const edm::ParameterSet &params) :
 	trackPseudoSelector(params.getParameter<edm::ParameterSet>("trackPseudoSelection")),
 	pseudoMultiplicityMin(params.getParameter<unsigned int>("pseudoMultiplicityMin")),
 	trackMultiplicityMin(params.getParameter<unsigned int>("trackMultiplicityMin")),
+	minTrackWeight(params.getParameter<double>("minimumTrackWeight")),
 	useTrackWeights(params.getParameter<bool>("useTrackWeights")),
 	vertexMassCorrection(params.getParameter<bool>("correctVertexMass")),
 	pseudoVertexV0Filter(params.getParameter<edm::ParameterSet>("pseudoVertexV0Filter")),
@@ -114,9 +115,8 @@ CombinedSVComputer::operator () (const TrackIPTagInfo &ipInfo,
 			for(TrackRefVector::const_iterator track = tracks.begin();
 			    track != tracks.end(); track++) {
 				double w = svInfo.trackWeight(i, *track);
-				if (w < 0.5)
-					continue;
-				vertexKinematics.add(**track, w);
+				if (w >= minTrackWeight)
+					vertexKinematics.add(**track, w);
 			}
 		}
 

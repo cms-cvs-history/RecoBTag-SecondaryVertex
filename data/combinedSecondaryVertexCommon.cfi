@@ -2,6 +2,7 @@ block combinedSecondaryVertexCommon = {
 	include "RecoBTag/SecondaryVertex/data/trackSelection.cfi"
 	include "RecoBTag/SecondaryVertex/data/trackPseudoSelection.cfi"
 
+	double minimumTrackWeight	= 0.5
 	double charmCut			= 1.5
 	string trackSort		= "sip2dSig"
 	uint32 pseudoMultiplicityMin	= 2
