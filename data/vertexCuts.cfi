@@ -1,5 +1,6 @@
 PSet vertexCuts = {
 	bool useTrackWeights		= true
+	double minimumTrackWeight	= 0.5
 	double massMax			= 6.5
 	double fracPV			= 0.65
 	uint32 multiplicityMin		= 2
