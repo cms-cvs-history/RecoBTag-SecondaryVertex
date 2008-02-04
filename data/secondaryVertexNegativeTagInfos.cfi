@@ -1,0 +1,6 @@
+module secondaryVertexNegativeTagInfos = secondaryVertexTagInfos from "RecoBTag/SecondaryVertex/data/secondaryVertexTagInfos.cfi"
+replace secondaryVertexNegativeTagInfos.vertexCuts.distVal2dMin		= -2.5
+replace secondaryVertexNegativeTagInfos.vertexCuts.distVal2dMax		= -0.01
+replace secondaryVertexNegativeTagInfos.vertexCuts.distSig2dMin		= -99999.9
+replace secondaryVertexNegativeTagInfos.vertexCuts.distSig2dMax		= -3.0
+replace secondaryVertexNegativeTagInfos.vertexCuts.maxDeltaRToJetAxis	= -0.5
