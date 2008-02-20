@@ -7,8 +7,8 @@ block combinedSecondaryVertexCommon = {
 	string trackSort		= "sip2dSig"
 	uint32 pseudoMultiplicityMin	= 2
 	uint32 trackMultiplicityMin	= 3
-	bool useTrackWeights		= false
-	bool correctVertexMass		= false
+	bool useTrackWeights		= true
+	bool correctVertexMass		= true
 	PSet pseudoVertexV0Filter	= { double k0sMassWindow = 0.05 }
 	PSet trackPairV0Filter		= { double k0sMassWindow = 0.03 }
 }
