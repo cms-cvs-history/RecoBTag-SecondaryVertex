@@ -8,6 +8,7 @@
 #include "DataFormats/BTauReco/interface/TaggingVariable.h"
 
 #include "RecoBTag/SecondaryVertex/interface/TrackSelector.h"
+#include "RecoBTag/SecondaryVertex/interface/V0Filter.h"
 
 class CombinedSVComputer {
     public:
@@ -24,9 +25,14 @@ class CombinedSVComputer {
 
 	double					charmCut;
 	reco::TrackIPTagInfo::SortCriteria	sortCriterium;
+	reco::TrackSelector			trackSelector;
 	reco::TrackSelector			trackPseudoSelector;
 	unsigned int				pseudoMultiplicityMin;
+	unsigned int				trackMultiplicityMin;
 	bool					useTrackWeights;
+	bool					vertexMassCorrection;
+	reco::V0Filter				pseudoVertexV0Filter;
+	reco::V0Filter				trackPairV0Filter;
 };
 
 #endif // RecoBTag_SecondaryVertex_CombinedSVComputer_h

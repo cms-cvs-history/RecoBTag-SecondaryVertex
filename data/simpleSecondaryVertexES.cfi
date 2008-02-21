@@ -1,8 +1,5 @@
 es_module simpleSecondaryVertex = SimpleSecondaryVertexESProducer {
-	string ComponentName = "simpleSecondaryVertex"
-	PSet JetTagComputerPSet = {
-		bool use3d = true
-		bool unBoost = false
-		bool useSignificance = true
-	}
+	bool use3d = true
+	bool unBoost = false
+	bool useSignificance = true
 }

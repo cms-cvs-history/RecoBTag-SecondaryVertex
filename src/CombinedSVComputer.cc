@@ -24,6 +24,7 @@
 #include "RecoBTag/SecondaryVertex/interface/TrackSorting.h"
 #include "RecoBTag/SecondaryVertex/interface/TrackSelector.h"
 #include "RecoBTag/SecondaryVertex/interface/TrackKinematics.h"
+#include "RecoBTag/SecondaryVertex/interface/V0Filter.h"
 
 #include "RecoBTag/SecondaryVertex/interface/CombinedSVComputer.h"
 
@@ -32,9 +33,14 @@ using namespace reco;
 CombinedSVComputer::CombinedSVComputer(const edm::ParameterSet &params) :
 	charmCut(params.getParameter<double>("charmCut")),
 	sortCriterium(TrackSorting::getCriterium(params.getParameter<std::string>("trackSort"))),
+	trackSelector(params.getParameter<edm::ParameterSet>("trackSelection")),
 	trackPseudoSelector(params.getParameter<edm::ParameterSet>("trackPseudoSelection")),
 	pseudoMultiplicityMin(params.getParameter<unsigned int>("pseudoMultiplicityMin")),
-	useTrackWeights(params.getParameter<bool>("useTrackWeights"))
+	trackMultiplicityMin(params.getParameter<unsigned int>("trackMultiplicityMin")),
+	useTrackWeights(params.getParameter<bool>("useTrackWeights")),
+	vertexMassCorrection(params.getParameter<bool>("correctVertexMass")),
+	pseudoVertexV0Filter(params.getParameter<edm::ParameterSet>("pseudoVertexV0Filter")),
+	trackPairV0Filter(params.getParameter<edm::ParameterSet>("trackPairV0Filter"))
 {
 }
 
@@ -94,6 +100,9 @@ CombinedSVComputer::operator () (const TrackIPTagInfo &ipInfo,
 	vars.insert(btau::jetPt, jet->pt(), true);
 	vars.insert(btau::jetEta, jet->eta(), true);
 
+	if (ipInfo.tracks().size() < trackMultiplicityMin)
+		return vars;
+
 	TrackKinematics allKinematics;
 	TrackKinematics vertexKinematics;
 
@@ -127,11 +136,61 @@ CombinedSVComputer::operator () (const TrackIPTagInfo &ipInfo,
 						ipInfo.impactParameterData();
 	const edm::RefVector<TrackCollection> &tracks =
 						ipInfo.selectedTracks();
+	std::vector<TrackRef> pseudoVertexTracks;
 
+	TrackRef trackPairV0Test[2];
 	for(std::vector<size_t>::const_iterator iter = indices.begin();
 	    iter != indices.end(); ++iter) {
 		const TrackIPTagInfo::TrackIPData &data = ipData[*iter];
-		const Track &track = *tracks[*iter];
+		const TrackRef &trackRef = tracks[*iter];
+		const Track &track = *trackRef;
+
+		// filter track
+
+		if (!trackSelector(track, data, *jet))
+			continue;
+
+		// add track to kinematics for all tracks in jet
+
+		allKinematics.add(track);
+
+		// if no vertex was reconstructed, attempt pseudo vertex
+
+		if (vtxType == btag::Vertices::NoVertex &&
+		    trackPseudoSelector(track, data, *jet)) {
+			pseudoVertexTracks.push_back(trackRef);
+			vertexKinematics.add(track);
+		}
+
+		// check against all other tracks for V0 track pairs
+
+		trackPairV0Test[0] = tracks[*iter];
+		bool ok = true;
+		for(std::vector<size_t>::const_iterator pairIter =
+							indices.begin();
+		    pairIter != indices.end(); ++pairIter) {
+			if (pairIter == iter)
+				continue;
+
+			const TrackIPTagInfo::TrackIPData &pairTrackData =
+							ipData[*pairIter];
+			const TrackRef &pairTrackRef = tracks[*pairIter];
+			const Track &pairTrack = *pairTrackRef;
+
+			if (!trackSelector(pairTrack, pairTrackData, *jet))
+				continue;
+
+			trackPairV0Test[1] = pairTrackRef;
+			if (!trackPairV0Filter(trackPairV0Test, 2)) {
+				ok = false;
+				break;
+			}
+		}
+		if (!ok)
+			continue;
+
+		// add track variables
+
 		math::XYZVector trackMom = track.momentum();
 		double trackMag = std::sqrt(trackMom.Mag2());
 
@@ -152,16 +211,11 @@ CombinedSVComputer::operator () (const TrackIPTagInfo &ipInfo,
 		vars.insert(btau::trackDeltaR, VectorUtil::DeltaR(trackMom, jetDir), true);
 		vars.insert(btau::trackPtRatio, VectorUtil::Perp(trackMom, jetDir) / trackMag, true);
 		vars.insert(btau::trackPParRatio, jetDir.Dot(trackMom) / trackMag, true);
-
-		allKinematics.add(track);
-
-		if (vtxType == btag::Vertices::NoVertex &&
-		    trackPseudoSelector(track, data))
-			vertexKinematics.add(track);
 	} 
 
 	if (vtxType == btag::Vertices::NoVertex &&
-	    vertexKinematics.numberOfTracks() >= pseudoMultiplicityMin)
+	    vertexKinematics.numberOfTracks() >= pseudoMultiplicityMin &&
+	    pseudoVertexV0Filter(pseudoVertexTracks))
 		vtxType = btag::Vertices::PseudoVertex;
 
 	vars.insert(btau::vertexCategory, vtxType, true);
@@ -189,7 +243,17 @@ CombinedSVComputer::operator () (const TrackIPTagInfo &ipInfo,
 			            VectorUtil::DeltaR(vertexSum, jetDir), true);
 		}
 
-		vars.insert(btau::vertexMass, vertexSum.M(), true);
+		double vertexMass = vertexSum.M();
+		if (vtxType == btag::Vertices::RecoVertex &&
+		    vertexMassCorrection) {
+			GlobalVector dir = svInfo.flightDirection(0);
+			double vertexPt2 =
+				math::XYZVector(dir.x(), dir.y(), dir.z()).
+					Cross(vertexSum).Mag2() / dir.mag2();
+			vertexMass = std::sqrt(vertexMass * vertexMass +
+			                       vertexPt2) + std::sqrt(vertexPt2);
+		}
+		vars.insert(btau::vertexMass, vertexMass, true);
 		vars.insert(btau::vertexEnergyRatio, vertexSum.E() / allSum.E(), true);
 	}
 

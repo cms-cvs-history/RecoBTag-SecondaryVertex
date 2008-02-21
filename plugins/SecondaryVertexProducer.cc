@@ -127,6 +127,7 @@ void SecondaryVertexProducer::produce(edm::Event &event,
 	// use beamspot as fallback (FIXME: use same as TrackIPTagInfos)
 
 	BeamSpot beamSpot;
+	beamSpot.dummy();
 	Vertex beamSpotPV(beamSpot.position(), beamSpot.covariance3D(),
 	                  -1, -1, 0);
 
@@ -137,8 +138,8 @@ void SecondaryVertexProducer::produce(edm::Event &event,
 		std::vector<SecondaryVertexTagInfo::IndexedTrackData> trackData;
 
 		const Vertex &pv = iterJets->primaryVertex().isNonnull()
-					? *iterJets->primaryVertex()
-					: beamSpotPV;
+		                   	? *iterJets->primaryVertex()
+		                   	: beamSpotPV;
 
 		edm::RefToBase<Jet> jetRef = iterJets->jet();
 
@@ -171,7 +172,7 @@ void SecondaryVertexProducer::produce(edm::Event &event,
 			// select tracks for SV fit
 
 			trackData.back().second.svStatus =
-				trackSelector(*trackRef, ipData[i])
+				trackSelector(*trackRef, ipData[i], *jetRef)
 					? SecondaryVertexTagInfo::TrackData::trackUsedForVertexFit
 					: SecondaryVertexTagInfo::TrackData::trackSelected;
 		}
@@ -233,15 +234,15 @@ void SecondaryVertexProducer::produce(edm::Event &event,
 
 			// mark tracks successfully used in vertex fit
 
-			for(Vertex::trackRef_iterator iter = sv.tracks_begin();
+			for(track_iterator iter = sv.tracks_begin();
 			    iter != sv.tracks_end(); iter++) {
 				TrackRefVector::const_iterator pos =
 					std::find(trackRefs.begin(), trackRefs.end(),
-					          iter->castTo<TrackRef>());
+					          *iter);
 				if (pos == trackRefs.end())
 					throw cms::Exception("TrackNotFound")
 						<< "Could not find track in secondary "
-						   "vertex in origina tracks."
+						   "vertex in original tracks."
 						<< std::endl;
 
 				unsigned int index = pos - trackRefs.begin();

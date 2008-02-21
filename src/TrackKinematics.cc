@@ -37,7 +37,7 @@ TrackKinematics::TrackKinematics(const TrackRefVector &tracks) :
 TrackKinematics::TrackKinematics(const Vertex &vertex) :
 	n(0), sumWeights(0)
 {
-	for(Vertex::trackRef_iterator iter = vertex.tracks_begin();
+	for(track_iterator iter = vertex.tracks_begin();
 	    iter != vertex.tracks_end(); iter++)
 		add(**iter, vertex.trackWeight(*iter));
 }

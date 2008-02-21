@@ -1,6 +1,7 @@
 #include <functional>
 #include <algorithm>
 #include <iterator>
+#include <cmath>
 #include <set>
 
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
@@ -12,6 +13,7 @@
 
 #include "RecoBTag/SecondaryVertex/interface/SecondaryVertex.h"
 #include "RecoBTag/SecondaryVertex/interface/TrackKinematics.h"
+#include "RecoBTag/SecondaryVertex/interface/V0Filter.h"
 #include "RecoBTag/SecondaryVertex/interface/VertexFilter.h"
 
 using namespace reco; 
@@ -29,21 +31,22 @@ VertexFilter::VertexFilter(const edm::ParameterSet &params) :
 	distSig2dMax(params.getParameter<double>("distSig2dMax")),
 	distSig3dMin(params.getParameter<double>("distSig3dMin")),
 	distSig3dMax(params.getParameter<double>("distSig3dMax")),
-	maxDeltaRToJetAxis(params.getParameter<double>("maxDeltaRToJetAxis"))
+	maxDeltaRToJetAxis(params.getParameter<double>("maxDeltaRToJetAxis")),
+	v0Filter(params.getParameter<edm::ParameterSet>("v0Filter"))
 {
 }
 
-static unsigned int computeSharedTracks(const Vertex &pv, const Vertex &sv)
+static unsigned int
+computeSharedTracks(const Vertex &pv, const std::vector<TrackRef> &svTracks)
 {
 	std::set<TrackRef> pvTracks;
-	std::transform(pv.tracks_begin(), pv.tracks_end(),
-	               std::inserter(pvTracks, pvTracks.begin()),
-	               std::mem_fun_ref(&TrackBaseRef::castTo<TrackRef>));
+	std::copy(pv.tracks_begin(), pv.tracks_end(),
+	          std::inserter(pvTracks, pvTracks.begin()));
 
 	unsigned int count = 0;
-	for(Vertex::trackRef_iterator iter = sv.tracks_begin();
-	    iter != sv.tracks_end(); iter++)
-		count += pvTracks.count(iter->castTo<TrackRef>());
+	for(std::vector<TrackRef>::const_iterator iter = svTracks.begin();
+	    iter != svTracks.end(); iter++)
+		count += pvTracks.count(*iter);
 
 	return count;
 }
@@ -52,9 +55,13 @@ bool VertexFilter::operator () (const Vertex &pv,
                                 const SecondaryVertex &sv,
                                 const GlobalVector &direction) const
 {
+	std::vector<TrackRef> svTracks;
+	std::copy(sv.tracks_begin(), sv.tracks_end(),
+	          std::inserter(svTracks, svTracks.begin()));
+
 	// minimum number of tracks at vertex
 
-	if (sv.tracksSize() < multiplicityMin)
+	if (svTracks.size() < multiplicityMin)
 		return false;
 
 	// flight distance limits (value and significance, 2d and 3d)
@@ -73,7 +80,7 @@ bool VertexFilter::operator () (const Vertex &pv,
 
 	if (Geom::deltaR(sv.position() - pv.position(),
 	                 (maxDeltaRToJetAxis > 0) ? direction : -direction)
-							> maxDeltaRToJetAxis)
+						> std::abs(maxDeltaRToJetAxis))
 		return false;
 
 	// compute fourvector sum of tracks as vertex and cut on inv. mass
@@ -88,9 +95,15 @@ bool VertexFilter::operator () (const Vertex &pv,
 
 	// find shared tracks between PV and SV
 
-	unsigned int sharedTracks = computeSharedTracks(pv, sv);
+	if (fracPV < 1.0) {
+		unsigned int sharedTracks = computeSharedTracks(pv, svTracks);
+		if ((double)sharedTracks / svTracks.size() > fracPV)
+			return false;
+	}
 
-	if ((double)sharedTracks / sv.tracksSize() > fracPV)
+	// check for V0 vertex
+
+	if (!v0Filter(svTracks))
 		return false;
 
 	return true;
