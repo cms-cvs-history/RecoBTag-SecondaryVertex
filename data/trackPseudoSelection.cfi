@@ -1,4 +1,6 @@
 PSet trackPseudoSelection = {
+	string qualityClass	= "any"
+
 	# use defaults from TrackIPProducer, except for jet Delta R
 	uint32 pixelHitsMin	= 0
 	uint32 totalHitsMin	= 0
