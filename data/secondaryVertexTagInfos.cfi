@@ -1,10 +1,14 @@
+include "RecoBTag/SecondaryVertex/data/trackSelection.cfi"
+include "RecoBTag/SecondaryVertex/data/vertexReco.cfi"
+include "RecoBTag/SecondaryVertex/data/vertexCuts.cfi"
+include "RecoBTag/SecondaryVertex/data/vertexSelection.cfi"
+
 module secondaryVertexTagInfos = SecondaryVertexProducer {
 	InputTag trackIPTagInfos	= impactParameterTagInfos
-
-	include "RecoBTag/SecondaryVertex/data/trackSelection.cfi"
-	include "RecoBTag/SecondaryVertex/data/vertexReco.cfi"
-	include "RecoBTag/SecondaryVertex/data/vertexCuts.cfi"
-	include "RecoBTag/SecondaryVertex/data/vertexSelection.cfi"
+        using trackSelectionBlock
+        using vertexRecoBlock
+        using vertexCutsBlock
+        using vertexSelectionBlock
 
 	string trackSort		= "sip3dSig"
 	bool useBeamConstraint		= true

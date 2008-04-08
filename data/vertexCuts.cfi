@@ -1,4 +1,5 @@
-PSet vertexCuts = {
+block vertexCutsBlock = {
+  PSet vertexCuts = {
 	bool useTrackWeights		= true
 	double minimumTrackWeight	= 0.5
 	double massMax			= 6.5
@@ -17,4 +18,5 @@ PSet vertexCuts = {
 
 	double maxDeltaRToJetAxis	= 0.5
 	PSet v0Filter			= { double k0sMassWindow = 0.05 }
+  }
 }

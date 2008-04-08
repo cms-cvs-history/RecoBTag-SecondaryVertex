@@ -1,4 +1,5 @@
-PSet trackSelection = {
+block trackSelectionBlock = {
+  PSet trackSelection = {
 	string qualityClass	= "any"
 
 	# use defaults from TrackIPProducer, except for jet Delta R
@@ -17,4 +18,6 @@ PSet trackSelection = {
 	double sip3dValMax	= +99999.9
 	double sip3dSigMin	= -99999.9
 	double sip3dSigMax	= +99999.9
+  }
 }
+

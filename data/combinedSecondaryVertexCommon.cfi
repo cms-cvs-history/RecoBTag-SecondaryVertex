@@ -1,6 +1,9 @@
+include "RecoBTag/SecondaryVertex/data/trackSelection.cfi"
+include "RecoBTag/SecondaryVertex/data/trackPseudoSelection.cfi"
+
 block combinedSecondaryVertexCommon = {
-	include "RecoBTag/SecondaryVertex/data/trackSelection.cfi"
-	include "RecoBTag/SecondaryVertex/data/trackPseudoSelection.cfi"
+        using trackSelectionBlock
+        using trackPseudoSelectionBlock
 
 	double minimumTrackWeight	= 0.5
 	double charmCut			= 1.5

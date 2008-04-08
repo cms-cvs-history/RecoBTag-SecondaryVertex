@@ -1,3 +1,5 @@
-PSet vertexSelection = {
+block vertexSelectionBlock = {
+  PSet vertexSelection = {
 	string sortCriterium = "dist3dError"
+  }
 }

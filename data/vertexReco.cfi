@@ -1,8 +1,10 @@
-PSet vertexReco = {
+block vertexRecoBlock = {
+  PSet vertexReco = {
 	string finder = "avr"
 	bool smoothing = false
 	double weightthreshold = 0.001
 	double primcut = 1.8
 	double seccut = 6.0
 	double minweight = 0.5
+  }
 }
