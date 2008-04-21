@@ -1,5 +1,5 @@
 block vertexSelectionBlock = {
-  PSet vertexSelection = {
-	string sortCriterium = "dist3dError"
-  }
+	PSet vertexSelection = {
+		string sortCriterium = "dist3dError"
+	}
 }
