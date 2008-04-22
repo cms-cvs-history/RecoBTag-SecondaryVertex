@@ -1,5 +1,4 @@
 module combinedSecondaryVertexMVABJetTags = JetTagProducer {
-	InputTag ipTagInfos = impactParameterTagInfos
-	InputTag svTagInfos = secondaryVertexTagInfos
+	VInputTag tagInfos = { impactParameterTagInfos, secondaryVertexTagInfos }
 	string jetTagComputer = "combinedSecondaryVertexMVA"
 }
