@@ -1,5 +1,0 @@
-es_module simpleSecondaryVertex = SimpleSecondaryVertexESProducer {
-	bool use3d = true
-	bool unBoost = false
-	bool useSignificance = true
-}

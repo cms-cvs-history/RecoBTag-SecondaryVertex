@@ -1,4 +1,0 @@
-module combinedSecondaryVertexMVABJetTags = JetTagProducer {
-	VInputTag tagInfos = { impactParameterTagInfos, secondaryVertexTagInfos }
-	string jetTagComputer = "combinedSecondaryVertexMVA"
-}
