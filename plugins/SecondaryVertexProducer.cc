@@ -80,6 +80,7 @@ class SecondaryVertexProducer : public edm::EDProducer {
 	static ConstraintType getConstraintType(const std::string &name);
 
 	const edm::InputTag		trackIPTagInfoLabel;
+        edm::InputTag beamSpotTag;
 	TrackIPTagInfo::SortCriteria	sortCriterium;
 	TrackSelector			trackSelector;
 	ConstraintType			constraint;
@@ -149,6 +150,12 @@ SecondaryVertexProducer::SecondaryVertexProducer(
 	    constraint == CONSTRAINT_PV_BS_Z_ERRORS_SCALED)
 		constraintScaling = params.getParameter<double>("pvErrorScaling");
 
+	if (constraint == CONSTRAINT_PV_BEAMSPOT_SIZE ||
+	    constraint == CONSTRAINT_PV_BS_Z_ERRORS_SCALED ||
+	    constraint == CONSTRAINT_BEAMSPOT ||
+	    constraint == CONSTRAINT_PV_PRIMARIES_IN_FIT )
+	    beamSpotTag = params.getParameter<edm::InputTag>("beamSpotTag");
+
 	produces<SecondaryVertexTagInfoCollection>();
 }
 
@@ -209,14 +216,14 @@ void SecondaryVertexProducer::produce(edm::Event &event,
 	double sigmaZ = 0.0, beamWidth = 0.0;
 	switch(constraint) {
 	    case CONSTRAINT_PV_BEAMSPOT_SIZE:
-		event.getByType(beamSpot);
+	        event.getByLabel(beamSpotTag,beamSpot);
 		bsCovSrc[3] = bsCovSrc[4] = bsCovSrc[5] = bsCovSrc[6] = 1;
 		sigmaZ = beamSpot->sigmaZ();
 		beamWidth = beamSpot->BeamWidthX();
 		break;
 
 	    case CONSTRAINT_PV_BS_Z_ERRORS_SCALED:
-		event.getByType(beamSpot);
+	      event.getByLabel(beamSpotTag,beamSpot);
 		bsCovSrc[0] = bsCovSrc[1] = 2;
 		bsCovSrc[3] = bsCovSrc[4] = bsCovSrc[5] = 1;
 		sigmaZ = beamSpot->sigmaZ();
@@ -228,7 +235,7 @@ void SecondaryVertexProducer::produce(edm::Event &event,
 
 	    case CONSTRAINT_BEAMSPOT:
 	    case CONSTRAINT_PV_PRIMARIES_IN_FIT:
-		event.getByType(beamSpot);
+	        event.getByLabel(beamSpotTag,beamSpot);
 		break;
 
 	    default:
@@ -317,7 +324,7 @@ void SecondaryVertexProducer::produce(edm::Event &event,
 
 			// select tracks for SV finder
 
-			if (!trackSelector(*trackRef, ipData[i], *jetRef,
+			if (!trackSelector(*trackRef, ipData[indices[i]], *jetRef,
 			                   RecoVertex::convertPos(
 			                   		pv.position()))) {
 				trackData.back().second.svStatus =
@@ -342,10 +349,10 @@ void SecondaryVertexProducer::produce(edm::Event &event,
 			if (useGhostTrack) {
 				GhostTrackState gtState(fitTrack);
 				GlobalPoint pos =
-					ipData[i].closestToGhostTrack;
+					ipData[indices[i]].closestToGhostTrack;
 				gtState.linearize(*gtPred, true,
 				                  gtPred->lambda(pos));
-				gtState.setWeight(ipData[i].ghostTrackWeight);
+				gtState.setWeight(ipData[indices[i]].ghostTrackWeight);
 				gtStates.push_back(gtState);
 			}
 		}
@@ -393,12 +400,12 @@ void SecondaryVertexProducer::produce(edm::Event &event,
 			for(unsigned int i = 0; i < 7; i++) {
 				unsigned int covSrc = bsCovSrc[i];
 				for(unsigned int j = 0; j < 7; j++) {
-					double v;
+					double v=0.0;
 					if (!covSrc || bsCovSrc[j] != covSrc)
 						v = 0.0;
 					else if (covSrc == 1)
 						v = beamSpot->covariance(i, j);
-					else
+					else if (j<3 && i<3)
 						v = pv.covariance(i, j) *
 						    constraintScaling;
 					cov(i, j) = v;
