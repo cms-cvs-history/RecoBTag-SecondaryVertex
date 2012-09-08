@@ -38,8 +38,6 @@ class TrackSelector {
 	double				sip3dValMax;
 	double				sip3dSigMin;
 	double				sip3dSigMax;
-	bool                            useVariableJTA_;
-	reco::TrackIPTagInfo::variableJTAParameters varJTApars;
 };
 
 } // namespace reco
